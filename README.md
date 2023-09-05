@@ -131,7 +131,7 @@ Our simplified airflow feature engineering pipeline has two simple but effective
 - First, run the dbt project dbt_task_group using cosmos.
 - Last, materialize the newly calculated features values into Feast. Materialize means the new feature values will be updated in your offline store, Snowflake, which holds a history of feature values, and your online store, Redis, will be updated to only contain the newest feature values.
 
-12. Spin up astronomer using `astro dev start` and trigger the location_sales_feature_engineering pipeline. 🤞 all tasks are green.
+13. Spin up astronomer using `astro dev start` and trigger the location_sales_feature_engineering pipeline. 🤞 all tasks are green.
 
 ## Summary
 
@@ -139,4 +139,4 @@ Hopefully this tutorial was able to simplify/(make it seem less daunting) the pr
 
 ![airflow pipeline screenshot](static/successful_pipeline.png)
 
-13. Spin down astronomer using `astro dev kill` and spin down the feature store with Ctrl+C and then `docker-compose -f docker-compose-feast.yml down`
+14. Spin down astronomer using `astro dev kill` and spin down the feature store with Ctrl+C and then `docker-compose -f docker-compose-feast.yml down`
