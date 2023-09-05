@@ -1,0 +1,45 @@
+version: '3'
+services:
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  registry:
+    container_name: registry
+    image: postgres:10.5
+    restart: always
+    environment:
+      - POSTGRES_DB=feast
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+    ports:
+      - "55001:5432"
+    volumes: 
+      - feast-postgres-db:/data/postgres
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      retries: 5
+
+  feature_server:
+    container_name: feast_feature_server
+    build:
+      context: .
+      dockerfile: feature_repo/Dockerfile
+    depends_on:
+      registry:
+        condition: service_healthy
+    ports:
+      - "6566:6566"
+    links:
+      - redis
+    healthcheck:
+      test: "${DOCKER_HEALTHCHECK_TEST:-curl localhost:6566/health}"
+      interval: "5s"
+      retries: 5
+
+volumes:
+  feast-postgres-db:
+    driver: local

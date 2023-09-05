@@ -1,0 +1,25 @@
+project: tasty_bytes_feature_store
+provider: local
+registry:
+  registry_type: sql
+  path: postgresql://postgres:mysecretpassword@127.0.0.1:55001/feast
+offline_store:
+    type: snowflake.offline
+    account: ${SNOWFLAKE_DEPLOYMENT_URL}
+    user: ${SNOWFLAKE_USER}
+    password: ${SNOWFLAKE_PASSWORD}
+    role: ${SNOWFLAKE_ROLE}
+    warehouse: ${SNOWFLAKE_WAREHOUSE}
+    database: FROSTBYTE_TASTY_BYTES
+batch_engine:
+    type: snowflake.engine
+    account: ${SNOWFLAKE_DEPLOYMENT_URL}
+    user: ${SNOWFLAKE_USER}
+    password: ${SNOWFLAKE_PASSWORD}
+    role: ${SNOWFLAKE_ROLE}
+    warehouse: ${SNOWFLAKE_WAREHOUSE}
+    database: FROSTBYTE_TASTY_BYTES
+online_store:
+  type: redis
+  connection_string: localhost:6379
+entity_key_serialization_version: 2

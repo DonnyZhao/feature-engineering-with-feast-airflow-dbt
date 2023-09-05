@@ -1,0 +1,15 @@
+
+version: 2
+
+models:
+  - name: mart_location_historic_sales
+    config:
+      materialized: table
+
+  - name: mart_location_coordinates
+    config:
+      materialized: table 
+
+  - name: mart_location_population
+    config:
+      materialized: table
