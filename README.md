@@ -8,11 +8,8 @@ This repo was created as a simple demonstration on how to create a feature engin
 
 #### Snowflake Setup
 1. Create a demo [Snowflake account](https://www.snowflake.com/en/) with ACCOUNTADMIN access.
-<br>
 2. Enable Anaconda on the Snowflake account by going to <b>Admin</b> >> <b>Billing & Terms</b> >> <b>Anaconda</b> >> <b>Enable</b>.
-<br>
 3. Follow the [tasty bytes tutorial](https://quickstarts.snowflake.com/guide/tasty_bytes_introduction/index.html#0) from Snowflake to load the data we will be using into your Snowflake account.
-<br>
 4. In addition, follow step 3 in the [tasty bytes geospatial tutorial](https://quickstarts.snowflake.com/guide/tasty_bytes_zero_to_snowflake_geospatial/#2) to load the location coordinates data we'll also be using into the same Snowflake account.
 
 #### Environment Setup
@@ -38,7 +35,6 @@ A Feast repo can be created using the command `feast init tasty_bytes_feature_st
 An Astro project can be created using the command `astro dev init`. You will not have to do this because an Astro project already exists inside the airflow folder.
 
 7. Install the [Astro CLI](https://docs.astronomer.io/astro/cli/install-cli?tab=mac#install-the-astro-cli).
-<br>
 8. Add the following variables inside the airflow/.env file:
     ```
     AIRFLOW_VAR_SNOWFLAKE_DEPLOYMENT_URL=[YOUR DEPLOYMENT]
@@ -125,7 +121,6 @@ In the feature_store/feature_repo folder, each of these objects have been broken
 
 
 11. Once inside the /feature_repo folder, run `feast apply`. This will scan all of the python files for the feature we've defined and deploy all the infrastructure needed in your offline feature store (Snowflake).
-<br>
 12. We're now going to create our airflow pipeline, but before that, in the /feature_store folder, run the command:
     `docker-compose -f docker-compose-feast.yml up` 
     - This will spin up a Redis server to act as our online store as well as a Postgres server to act as the a central catalog of all the feature definitions and their related metadata.
