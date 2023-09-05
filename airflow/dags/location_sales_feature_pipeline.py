@@ -57,10 +57,7 @@ with DAG(
         group_id="location_sales_features",
         project_config=ProjectConfig(DBT_PROJECT_PATH),
         profile_config=profile_config,
-        execution_config=execution_config,
-        operator_args={
-            "vars": '{"run_date": "2017-12-31"}'
-        }
+        execution_config=execution_config
     )
 
     @task()
