@@ -1,6 +1,6 @@
 # Feast Demo
 
-This repo was created as a simple demonstration on how to create a feature engineering pipeline with dbt and Feast on Snowflake, orchestrated by Airflow.
+For this demo, we will be creating a feature engineering pipeline that creates features using the tasty bytes food truck dataset from Snowflake. The hypothetical initiative for these features are to train a ML model to direct food trucks to locations that are expected to have the highest sales for a given day. This use case was inspired from this [Snowflake quickstart](https://quickstarts.snowflake.com/guide/tasty_bytes_snowpark_101_for_data_science/#0). Features will be created using dbt and logged to Feast, a feature store. 
 
 *This demo assumes you have docker desktop, because we are using astronomer to spin up airflow*
 
