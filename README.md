@@ -15,21 +15,20 @@ For this demo, you will be creating a feature engineering pipeline using the tas
 #### Environment Setup
 
 5. Run the following commands to set up a virtual environment:
-- <code>conda create --name feast_on_snowflake --override-channels -c https://repo.anaconda.com/pkgs/snowflake python=3.10 numpy pandas</code>
-- <code>conda activate feast_on_snowflake</code>
-- <code>pip install 'feast[snowflake, redis]'== 0.33.1 dbt-snowflake==1.6</code>
+- `conda create --name feast_on_snowflake --override-channels -c https://repo.anaconda.com/pkgs/snowflake python=3.10 numpy pandas`
+- `conda activate feast_on_snowflake`
+- `pip install 'feast[snowflake, redis]'== 0.33.1 dbt-snowflake==1.6`
+
+#### Feast Setup
+
+A Feast repo can be created using the command `feast init tasty_bytes_feature_store -t snowflake`. You will not have to do this because a Feast repo has already been created inside the feature_store folder.
+
 6. Add the following variables to your environment for Feast to connect to Snowflake as your offline store. Replace the bracketed variables with your demo Snowflake account variables. 
     ```
     export SNOWFLAKE_DEPLOYMENT_URL=[YOUR DEPLOYMENT]
     export SNOWFLAKE_USER=[YOUR USER]
     export SNOWFLAKE_PASSWORD=[YOUR PASSWORD]
-    export SNOWFLAKE_ROLE=ACCOUNTADMIN
-    export SNOWFLAKE_WAREHOUSE=COMPUTE_WH
     ```
-
-#### Feast Setup
-
-A Feast repo can be created using the command `feast init tasty_bytes_feature_store -t snowflake`. You will not have to do this because a Feast repo has already been created inside the feature_store folder.
 
 #### Airflow Setup
 An Astro project can be created using the command `astro dev init`. You will not have to do this because an Astro project already exists inside the airflow folder.
@@ -41,8 +40,8 @@ An Astro project can be created using the command `astro dev init`. You will not
     AIRFLOW_VAR_SNOWFLAKE_SCHEMA=ANALYTICS
     AIRFLOW_VAR_SNOWFLAKE_USER=[YOUR USER]
     AIRFLOW_VAR_SNOWFLAKE_PASSWORD=[YOUR PASSWORD]
-    AIRFLOW_VAR_SNOWFLAKE_ROLE=ACCOUNTADMIN
-    AIRFLOW_VAR_SNOWFLAKE_WAREHOUSE=COMPUTE_WH
+    AIRFLOW_VAR_SNOWFLAKE_ROLE=TASTY_DATA_ENGINEER
+    AIRFLOW_VAR_SNOWFLAKE_WAREHOUSE=TASTY_DE_WH
     AIRFLOW_VAR_SNOWFLAKE_DATABASE=FROSTBYTE_TASTY_BYTES
     ``` 
 
@@ -65,8 +64,8 @@ For cosmos to work with Astronomer, a dbt folder was created under airflow/dags/
     [3] sso
     Desired authentication type option (enter a number): 1
     password (dev password): [YOUR PASSWORD]
-    role (dev role): ACCOUNTADMIN
-    warehouse (warehouse name): COMPUTE_WH
+    role (dev role): TASTY_DATA_ENGINEER
+    warehouse (warehouse name): TASTY_DE_WH
     database (default database that dbt will build objects in): FROSTBYTE_TASTY_BYTES
     schema (default schema that dbt will build objects in): ANALYTICS
     threads (1 or more) [1]: 1
@@ -120,10 +119,13 @@ In the feature_store/feature_repo folder, each of these objects have been broken
 - The <b>feature services</b> are defined in feature_services.py. A feature service is a combination of feature views that have the same entity. ML Models will read from a feature service. This additional layer in Feast's architecture allows feature views to be reusable in multiple feature services.
 
 
-11. Once inside the /feature_repo folder, run `feast apply`. This will scan all of the python files for the feature we've defined and deploy all the infrastructure needed in your offline feature store (Snowflake).
-12. We're now going to create our airflow pipeline, but before that, in the /feature_store folder, run the command:
-    `docker-compose -f docker-compose-feast.yml up` 
+11. Navigate to the /feature_store folder and run the following command to spin up our feature store:
+    `docker-compose -f docker-compose-feast.yml up --detach` 
     - This will spin up a Redis server to act as our online store as well as a Postgres server to act as the a central catalog of all the feature definitions and their related metadata.
+
+12. Once the services have spun up, navigate to the /feature_repo folder and run the following command to create or feature store:
+    `feast apply`
+    - This will scan all of the python files for the feature we've defined and deploy all the infrastructure needed in your offline feature store (Snowflake).
 
 #### Orchestrating with Airflow
 

@@ -8,17 +8,19 @@ offline_store:
     account: ${SNOWFLAKE_DEPLOYMENT_URL}
     user: ${SNOWFLAKE_USER}
     password: ${SNOWFLAKE_PASSWORD}
-    role: ${SNOWFLAKE_ROLE}
-    warehouse: ${SNOWFLAKE_WAREHOUSE}
+    role: TASTY_DATA_ENGINEER
+    warehouse: TASTY_DE_WH
     database: FROSTBYTE_TASTY_BYTES
+    schema: ANALYTICS
 batch_engine:
     type: snowflake.engine
     account: ${SNOWFLAKE_DEPLOYMENT_URL}
     user: ${SNOWFLAKE_USER}
     password: ${SNOWFLAKE_PASSWORD}
-    role: ${SNOWFLAKE_ROLE}
-    warehouse: ${SNOWFLAKE_WAREHOUSE}
+    role: TASTY_DATA_ENGINEER
+    warehouse: TASTY_DE_WH
     database: FROSTBYTE_TASTY_BYTES
+    schema: ANALYTICS
 online_store:
   type: redis
   connection_string: localhost:6379
