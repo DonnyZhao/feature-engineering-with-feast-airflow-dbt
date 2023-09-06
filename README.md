@@ -10,6 +10,7 @@ For this demo, you will be creating a feature engineering pipeline using the tas
 1. Create a demo [Snowflake account](https://www.snowflake.com/en/) with ACCOUNTADMIN access.
 2. Enable Anaconda on the Snowflake account by going to <b>Admin</b> >> <b>Billing & Terms</b> >> <b>Anaconda</b> >> <b>Enable</b>.
 3. Follow the [tasty bytes tutorial](https://quickstarts.snowflake.com/guide/tasty_bytes_introduction/index.html#0) from Snowflake to load the data we will be using into your Snowflake account.
+    - *A part of this step will create the TASTY_DATA_ENGINEER role, that dbt, airflow, and feast will use for the remaining of this tutorial.*  
 4. In addition, follow step 3 in the [tasty bytes geospatial tutorial](https://quickstarts.snowflake.com/guide/tasty_bytes_zero_to_snowflake_geospatial/#2) to load the location coordinates data we'll also be using into the same Snowflake account.
 
 #### Environment Setup
@@ -23,7 +24,7 @@ For this demo, you will be creating a feature engineering pipeline using the tas
 
 A Feast repo can be created using the command `feast init tasty_bytes_feature_store -t snowflake`. You will not have to do this because a Feast repo has already been created inside the feature_store folder.
 
-6. Add the following variables to your environment for Feast to connect to Snowflake as your offline store. Replace the bracketed variables with your demo Snowflake account variables. 
+6. Add the following variables to your environment for Feast to connect to Snowflake as your offline store. Replace the bracketed variables with your demo Snowflake account variables.
     ```
     export SNOWFLAKE_DEPLOYMENT_URL=[YOUR DEPLOYMENT]
     export SNOWFLAKE_USER=[YOUR USER]
@@ -34,7 +35,7 @@ A Feast repo can be created using the command `feast init tasty_bytes_feature_st
 An Astro project can be created using the command `astro dev init`. You will not have to do this because an Astro project already exists inside the airflow folder.
 
 7. Install the [Astro CLI](https://docs.astronomer.io/astro/cli/install-cli?tab=mac#install-the-astro-cli).
-8. Add the following variables inside the airflow/.env file:
+8. Create a .env file inside the airflow folder and add the following variables inside that file, replacing the bracketed values with your Snowflake account's values:
     ```
     AIRFLOW_VAR_SNOWFLAKE_DEPLOYMENT_URL=[YOUR DEPLOYMENT]
     AIRFLOW_VAR_SNOWFLAKE_SCHEMA=ANALYTICS
@@ -52,7 +53,7 @@ We will be using the [dbt-cosmos](https://github.com/astronomer/astronomer-cosmo
 
 For cosmos to work with Astronomer, a dbt folder was created under airflow/dags/ and a dbt project was created under that folder.
 
-9. Even though a dbt project already exists in the path `airflow/dags/dbt/dbt_tasty_bytes`, we will still run the command `dbt init` inside the dbt_tasty_bytes folder to set up your connection profile to Snowflake on your local profiles.yml file. An example of filling out the fields prompted by the dbt cli:
+9. Even though a dbt project already exists in the path `airflow/dags/dbt/dbt_tasty_bytes`, we will still run the command `dbt init` inside the dbt_tasty_bytes folder to set up your connection profile to Snowflake on your local profiles.yml file. An example of the filled out the fields prompted by the dbt cli:
     ```
     Which database would you like to use?
     [1] snowflake
@@ -123,7 +124,7 @@ In the feature_store/feature_repo folder, each of these objects have been broken
     `docker-compose -f docker-compose-feast.yml up --detach` 
     - This will spin up a Redis server to act as our online store as well as a Postgres server to act as the a central catalog of all the feature definitions and their related metadata.
 
-12. Once the services have spun up, navigate to the /feature_repo folder and run the following command to create or feature store:
+12. Once the services have spun up, cd to the feature_repo folder and run the following command to create or feature store:
     `feast apply`
     - This will scan all of the python files for the feature we've defined and deploy all the infrastructure needed in your offline feature store (Snowflake).
 
@@ -141,4 +142,4 @@ Hopefully this tutorial was able to simplify/(make it seem less daunting) the pr
 
 ![airflow pipeline screenshot](static/successful_pipeline.png)
 
-14. Spin down astronomer using `astro dev kill` and spin down the feature store with Ctrl+C and then `docker-compose -f docker-compose-feast.yml down`
+14. Spin down astronomer using `astro dev kill`. Navigate to the feature_store folder in your terminal and spin down the feature store with `docker-compose -f docker-compose-feast.yml down`.
