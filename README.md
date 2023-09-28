@@ -9,7 +9,7 @@ For this demo, you will be creating a feature engineering pipeline using the tas
 #### Snowflake Setup
 1. Create a demo [Snowflake account](https://www.snowflake.com/en/) with ACCOUNTADMIN access.
 2. Enable Anaconda on the Snowflake account by going to <b>Admin</b> >> <b>Billing & Terms</b> >> <b>Anaconda</b> >> <b>Enable</b>.
-3. Follow the [tasty bytes tutorial](https://quickstarts.snowflake.com/guide/tasty_bytes_introduction/index.html#0) from Snowflake to load the data we will be using into your Snowflake account.
+3. Follow the first two steps in the [tasty bytes tutorial](https://quickstarts.snowflake.com/guide/tasty_bytes_introduction/index.html#0) from Snowflake to load the data we will be using into your Snowflake account.
     - *A part of this step will create the TASTY_DATA_ENGINEER role, that dbt, airflow, and feast will use for the remaining of this tutorial.*  
 4. In addition, follow step 3 in the [tasty bytes geospatial tutorial](https://quickstarts.snowflake.com/guide/tasty_bytes_zero_to_snowflake_geospatial/#2) to load the location coordinates data we'll also be using into the same Snowflake account.
 
@@ -120,13 +120,13 @@ In the feature_store/feature_repo folder, each of these objects have been broken
 - The <b>feature services</b> are defined in feature_services.py. A feature service is a combination of feature views that have the same entity. ML Models will read from a feature service. This additional layer in Feast's architecture allows feature views to be reusable in multiple feature services.
 
 
-11. Navigate to the /feature_store folder and run the following command to spin up our feature store:
+11. Ensure the docker daemon on your machine is running. Navigate to the /feature_store folder in terminal and run the following command to spin up our feature store:
     `docker-compose -f docker-compose-feast.yml up --detach` 
     - This will spin up a Redis server to act as our online store as well as a Postgres server to act as the a central catalog of all the feature definitions and their related metadata.
 
 12. Once the services have spun up, cd to the feature_repo folder and run the following command to create or feature store:
     `feast apply`
-    - This will scan all of the python files for the feature we've defined and deploy all the infrastructure needed in your offline feature store (Snowflake).
+    - This will scan all of the python files for the features we've defined, store metadata in our Postgres registry, and deploy all the infrastructure needed in your offline feature store (Snowflake).
 
 #### Orchestrating with Airflow
 
@@ -134,7 +134,8 @@ Our simplified airflow feature engineering pipeline has two simple but effective
 - First, run the dbt project dbt_task_group using cosmos.
 - Last, materialize the newly calculated features values into Feast. Materialize means the new feature values will be updated in your offline store, Snowflake, which holds a history of feature values, and your online store, Redis, will be updated to only contain the newest feature values.
 
-13. Spin up astronomer using `astro dev start` and trigger the location_sales_feature_engineering pipeline. 🤞 all tasks are green.
+13. Navigate back inside the /airflow folder with `cd ../../airflow` and spin up astronomer using `astro dev start`.
+14. Go to localhost:8080 in your browser, login with 'admin' as the username and password, and trigger the location_sales_feature_engineering pipeline. 🤞 all tasks are green.
 
 ## Summary
 
@@ -142,4 +143,4 @@ Hopefully this tutorial was able to simplify/(make it seem less daunting) the pr
 
 ![airflow pipeline screenshot](static/successful_pipeline.png)
 
-14. Spin down astronomer using `astro dev kill`. Navigate to the feature_store folder in your terminal and spin down the feature store with `docker-compose -f docker-compose-feast.yml down`.
+15. Spin down astronomer using `astro dev kill`. Navigate to the feature_store folder in your terminal and spin down the feature store with `docker-compose -f docker-compose-feast.yml down`.
