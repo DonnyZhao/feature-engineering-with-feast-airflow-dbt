@@ -19,7 +19,10 @@ historic_sales as (
                     order by business_date
                     rows between 10 preceding and 1 preceding
                 ) as avg_l10_day_sales,
-                current_timestamp as timestamp
+                -- Feast requires event timestamped data. If your source data is not event timestamped,
+                -- which in the case of tasty bytes is not, we can circumevent this with a dummy 
+                -- event timestamp, ensuring that each entity (location_id) has unique timestamps. 
+                timestamp_ntz_from_parts(business_date, current_time(2)) as timestamp
     from        daily_sales
 )
 
