@@ -1,4 +1,5 @@
 from feast import Entity
+from feast.value_type import ValueType
 
 location_entity = Entity(
     name="location",
