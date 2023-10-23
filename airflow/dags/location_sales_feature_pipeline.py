@@ -9,6 +9,7 @@ from feast.infra.offline_stores.snowflake import SnowflakeOfflineStoreConfig
 from feast import RepoConfig, FeatureStore
 from feast.repo_config import RegistryConfig
 from feast.infra.online_stores.redis import RedisOnlineStoreConfig
+from datetime import datetime
 
 
 CONNECTION_ID = "sf_conn"
@@ -84,6 +85,10 @@ with DAG(
         os.environ["NO_PROXY"] = "*"
         store = FeatureStore(config=repo_config)
 
-        store.materialize(data_interval_start.subtract(hours=1), data_interval_end)
+        store.materialize(data_interval_start, data_interval_end)
 
-    dbt >> feast_materialize()
+    data_interval_start = datetime.strptime('2021-01-01T00:00:00', '%Y-%m-%dT%H:%M:%S')
+    data_interval_end = datetime.now()
+
+    dbt >> feast_materialize(data_interval_start=data_interval_start, data_interval_end=data_interval_end)
+    
